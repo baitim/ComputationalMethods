@@ -17,10 +17,8 @@ trajectories[:, 0] = v0
 for i in range(1, n_steps + 1):
     dW = np.sqrt(dt) * np.random.randn(n_paths)
     v_prev = trajectories[:, i - 1]
-    v_prev = np.maximum(v_prev, 0)
     dv = k * (theta - v_prev) * dt + q * np.sqrt(v_prev) * dW
     v_new = v_prev + dv
-    v_new = np.maximum(v_new, 0)
     trajectories[:, i] = v_new
 
 plt.figure(figsize=(10, 6))
