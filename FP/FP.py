@@ -15,13 +15,14 @@ def two_pass_var(data):
 
 def online_var(data):
     n = len(data)
-    M = data[0] * 0.0
-    S = 0.0
-    for i, x in enumerate(data, 1):
-        delta = x - M
-        M = M + delta / i
-        S = S + delta * (x - M)
-    return S / n
+    M = data[0].astype(float)
+    D = 0.0
+    for i in range(2, n + 1):
+        x = data[i-1]
+        M_new = M + (x - M) / (i - 1)
+        D_new = D + ((x - M) * (x - M_new) - D) / (i - 1)
+        M, D = M_new, D_new
+    return D
 
 distributions = [
     ("mean=1, std=1", 1.0, 1.0),
@@ -39,6 +40,7 @@ dtypes = [("float32", np.float32), ("float64", np.float64)]
 
 results = {label: {f"{m[0]}_{d[0]}": [] for m in methods for d in dtypes} for label, _, _ in distributions}
 
+print("Отрицательные значения дисперсии:")
 for label, mean, std in distributions:
     data64 = np.random.normal(mean, std, 1000)
     ref = np.var(data64, ddof=0)
@@ -49,6 +51,9 @@ for label, mean, std in distributions:
             computed = mfunc(data)
             err = abs(computed - ref) / ref
             results[label][f"{mname}_{dtype_name}"] = err
+
+            if computed < 0:
+                print(f"  {label}, {mname}_{dtype_name}: {computed:.6e}")
 
 fig, axes = plt.subplots(1, 3, figsize=(15, 6))
 
