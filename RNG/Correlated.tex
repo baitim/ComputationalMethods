@@ -1,0 +1,82 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T2A]{fontenc}
+\usepackage[russian]{babel}
+\usepackage{amsmath, amssymb}
+
+\begin{document}
+
+\subsection*{Постановка}
+Пусть \(X_1\) и \(X_2\) — независимые случайные величины, каждая из которых имеет стандартное нормальное распределение:
+\[
+X_1 \sim \mathcal{N}(0,1),\quad X_2 \sim \mathcal{N}(0,1),\quad \operatorname{Cov}(X_1,X_2)=0.
+\]
+Определим новые величины:
+\[
+Y_1 = X_1,
+\]
+\[
+Y_2 = \rho X_1 + \sqrt{1-\rho^2}\,X_2,
+\]
+где \(\rho \in [-1,1]\) — заданный коэффициент корреляции.
+
+\subsection*{1. Проверка маргинальных распределений}
+\textit{Математическое ожидание:}
+\[
+\mathbb{E}[Y_1] = \mathbb{E}[X_1] = 0,
+\]
+\[
+\mathbb{E}[Y_2] = \rho\,\mathbb{E}[X_1] + \sqrt{1-\rho^2}\,\mathbb{E}[X_2] = 0.
+\]
+
+\textit{Дисперсия:}
+\[
+\operatorname{Var}(Y_1) = \operatorname{Var}(X_1) = 1.
+\]
+\[
+\operatorname{Var}(Y_2) = \rho^2\operatorname{Var}(X_1) + (1-\rho^2)\operatorname{Var}(X_2) + 2\rho\sqrt{1-\rho^2}\operatorname{Cov}(X_1,X_2).
+\]
+Так как \(\operatorname{Cov}(X_1,X_2)=0\), получаем:
+\[
+\operatorname{Var}(Y_2) = \rho^2\cdot 1 + (1-\rho^2)\cdot 1 = 1.
+\]
+Следовательно, каждая из величин \(Y_1\) и \(Y_2\) имеет нулевое среднее и единичную дисперсию. Более того, поскольку они являются линейными комбинациями независимых нормальных величин, их распределения также нормальны:
+\[
+Y_1 \sim \mathcal{N}(0,1),\quad Y_2 \sim \mathcal{N}(0,1).
+\]
+
+\subsection*{2. Ковариация и корреляция}
+Вычислим ковариацию между \(Y_1\) и \(Y_2\):
+\[
+\operatorname{Cov}(Y_1,Y_2) = \mathbb{E}[Y_1Y_2] - \mathbb{E}[Y_1]\mathbb{E}[Y_2] = \mathbb{E}[Y_1Y_2].
+\]
+Подставим выражения:
+\[
+Y_1Y_2 = X_1\left(\rho X_1 + \sqrt{1-\rho^2}\,X_2\right) = \rho X_1^2 + \sqrt{1-\rho^2}\,X_1X_2.
+\]
+Возьмём математическое ожидание:
+\[
+\mathbb{E}[Y_1Y_2] = \rho\,\mathbb{E}[X_1^2] + \sqrt{1-\rho^2}\,\mathbb{E}[X_1X_2].
+\]
+Известно, что \(\mathbb{E}[X_1^2] = \operatorname{Var}(X_1) = 1\), а \(\mathbb{E}[X_1X_2] = 0\) в силу независимости. Таким образом,
+\[
+\operatorname{Cov}(Y_1,Y_2) = \rho.
+\]
+Коэффициент корреляции Пирсона по определению равен
+\[
+\operatorname{Corr}(Y_1,Y_2) = \frac{\operatorname{Cov}(Y_1,Y_2)}{\sqrt{\operatorname{Var}(Y_1)\operatorname{Var}(Y_2)}} = \frac{\rho}{1\cdot 1} = \rho.
+\]
+
+\subsection*{3. Совместная нормальность}
+Вектор \((X_1, X_2)\) имеет двумерное нормальное распределение с нулевым средним и единичной ковариационной матрицей (диагональной). Преобразование
+\[
+\begin{pmatrix} Y_1 \\ Y_2 \end{pmatrix}
+= \begin{pmatrix} 1 & 0 \\ \rho & \sqrt{1-\rho^2} \end{pmatrix}
+\begin{pmatrix} X_1 \\ X_2 \end{pmatrix}
+\]
+является линейным. Любое линейное преобразование нормального вектора снова даёт нормальный вектор. Следовательно, \((Y_1, Y_2)\) совместно нормальны с параметрами, найденными выше.
+
+\subsection*{Итог}
+Формулы \(Y_1 = X_1,\; Y_2 = \rho X_1 + \sqrt{1-\rho^2}X_2\) порождают двумерный нормальный вектор с нулевыми средними, единичными дисперсиями и корреляцией \(\rho\). Это подтверждается в вычислительном эксперименте (эмпирическая корреляция близка к заданной).
+
+\end{document}
